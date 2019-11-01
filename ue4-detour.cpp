@@ -40,7 +40,7 @@ int main(int argc,char** argv)
 	{
 		
 		printf("Deserialize %s as dtNavMesh successfuly!\n",argv[1]);
-		bool isvalidPoint = UE4RecastHelper::dtIsValidNagivationPoint(NavMeshData, InPoint,InExtern);
+		bool isvalidPoint = UE4RecastHelper::dtIsValidNavigationPoint(NavMeshData, InPoint,InExtern);
 
 		printf("InPoint: X=%f\tY=%f\tZ=%f\n", InPoint.X, InPoint.Y, InPoint.Z);
 		printf("Extern: X=%f\tY=%f\tZ=%f\n", InExtern.X, InExtern.Y,InExtern.Z);

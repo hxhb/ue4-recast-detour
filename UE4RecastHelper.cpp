@@ -5,7 +5,7 @@
 
 // #include "HACK_PRIVATE_MEMBER_UTILS.hpp"
 
-bool UE4RecastHelper::dtIsValidNagivationPoint(dtNavMesh* InNavMeshData, const UE4RecastHelper::FCustomVector& InPoint, const UE4RecastHelper::FCustomVector& InExtent)
+bool UE4RecastHelper::dtIsValidNavigationPoint(dtNavMesh* InNavMeshData, const UE4RecastHelper::FCustomVector& InPoint, const UE4RecastHelper::FCustomVector& InExtent)
 {
 	bool bSuccess = false;
 
