@@ -21,17 +21,17 @@ int main(int argc,char** argv)
 		printUsage();
 		return -1;
 	}
-	UE4RecastHelper::FCustomVector InPoint((float)std::atof(argv[2]), (float)std::atof(argv[3]), (float)std::atof(argv[4]) );
-	UE4RecastHelper::FCustomVector InExtern;
+	UE4RecastHelper::FVector3 InPoint((float)std::atof(argv[2]), (float)std::atof(argv[3]), (float)std::atof(argv[4]) );
+	UE4RecastHelper::FVector3 InExtern;
 
 	if (argc == 5)
 	{
-		InExtern = UE4RecastHelper::FCustomVector((float)10.0f, (float)10.f, (float)10.f);
+		InExtern = UE4RecastHelper::FVector3((float)10.0f, (float)10.f, (float)10.f);
 
 	}
 	if (argc == 8)
 	{
-		InExtern = UE4RecastHelper::FCustomVector((float)std::atof(argv[5]), (float)std::atof(argv[6]), (float)std::atof(argv[7]));
+		InExtern = UE4RecastHelper::FVector3((float)std::atof(argv[5]), (float)std::atof(argv[6]), (float)std::atof(argv[7]));
 	}
 	// printf("InPoint: X=%f\tY=%f\tZ=%f\t\n", Point.X,Point.Y,Point.Z);
 
