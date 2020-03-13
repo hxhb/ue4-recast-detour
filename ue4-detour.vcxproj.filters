@@ -16,6 +16,9 @@
     <Filter Include="Source Files\Detour">
       <UniqueIdentifier>{64bff843-724f-4384-a2ae-1412cf84d5c0}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Source Files\DetourTileCache">
+      <UniqueIdentifier>{2a4f8be3-46f0-47e8-a3bf-deefcfbe39e8}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Detour\DetourAlloc.h">
@@ -45,6 +48,12 @@
     <ClInclude Include="UE4RecastHelper.h">
       <Filter>Source Files</Filter>
     </ClInclude>
+    <ClInclude Include="DetourTileCache\DetourTileCache.h">
+      <Filter>Source Files\DetourTileCache</Filter>
+    </ClInclude>
+    <ClInclude Include="DetourTileCache\DetourTileCacheBuilder.h">
+      <Filter>Source Files\DetourTileCache</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="ue4-detour.cpp">
@@ -70,6 +79,18 @@
     </ClCompile>
     <ClCompile Include="UE4RecastHelper.cpp">
       <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="DetourTileCache\DetourTileCache.cpp">
+      <Filter>Source Files\DetourTileCache</Filter>
+    </ClCompile>
+    <ClCompile Include="DetourTileCache\DetourTileCacheBuilder.cpp">
+      <Filter>Source Files\DetourTileCache</Filter>
+    </ClCompile>
+    <ClCompile Include="DetourTileCache\DetourTileCacheDetail.cpp">
+      <Filter>Source Files\DetourTileCache</Filter>
+    </ClCompile>
+    <ClCompile Include="DetourTileCache\DetourTileCacheRegion.cpp">
+      <Filter>Source Files\DetourTileCache</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

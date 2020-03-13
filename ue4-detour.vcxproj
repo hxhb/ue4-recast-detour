@@ -151,6 +151,8 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="DetourTileCache\DetourTileCache.h" />
+    <ClInclude Include="DetourTileCache\DetourTileCacheBuilder.h" />
     <ClInclude Include="Detour\DetourAlloc.h" />
     <ClInclude Include="Detour\DetourAssert.h" />
     <ClInclude Include="Detour\DetourCommon.h" />
@@ -162,6 +164,10 @@
     <ClInclude Include="UE4RecastHelper.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="DetourTileCache\DetourTileCache.cpp" />
+    <ClCompile Include="DetourTileCache\DetourTileCacheBuilder.cpp" />
+    <ClCompile Include="DetourTileCache\DetourTileCacheDetail.cpp" />
+    <ClCompile Include="DetourTileCache\DetourTileCacheRegion.cpp" />
     <ClCompile Include="Detour\DetourAlloc.cpp" />
     <ClCompile Include="Detour\DetourCommon.cpp" />
     <ClCompile Include="Detour\DetourNavMesh.cpp" />
