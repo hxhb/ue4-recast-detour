@@ -75,6 +75,9 @@
     <ClInclude Include="ObstaclesTools\MeshLoaderObj.h">
       <Filter>Source Files\ObstaclesTools</Filter>
     </ClInclude>
+    <ClInclude Include="ObstaclesTools\ChunkyTriMesh.h">
+      <Filter>Source Files\ObstaclesTools</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="ue4-detour.cpp">
@@ -144,6 +147,9 @@
       <Filter>Source Files\Recast</Filter>
     </ClCompile>
     <ClCompile Include="ObstaclesTools\MeshLoaderObj.cpp">
+      <Filter>Source Files\ObstaclesTools</Filter>
+    </ClCompile>
+    <ClCompile Include="ObstaclesTools\ChunkyTriMesh.cpp">
       <Filter>Source Files\ObstaclesTools</Filter>
     </ClCompile>
   </ItemGroup>

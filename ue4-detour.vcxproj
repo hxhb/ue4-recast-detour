@@ -162,6 +162,7 @@
     <ClInclude Include="Detour\DetourNavMeshQuery.h" />
     <ClInclude Include="Detour\DetourNode.h" />
     <ClInclude Include="Detour\DetourStatus.h" />
+    <ClInclude Include="ObstaclesTools\ChunkyTriMesh.h" />
     <ClInclude Include="ObstaclesTools\MeshLoaderObj.h" />
     <ClInclude Include="Recast\Recast.h" />
     <ClInclude Include="Recast\RecastAlloc.h" />
@@ -179,6 +180,7 @@
     <ClCompile Include="Detour\DetourNavMeshBuilder.cpp" />
     <ClCompile Include="Detour\DetourNavMeshQuery.cpp" />
     <ClCompile Include="Detour\DetourNode.cpp" />
+    <ClCompile Include="ObstaclesTools\ChunkyTriMesh.cpp" />
     <ClCompile Include="ObstaclesTools\MeshLoaderObj.cpp" />
     <ClCompile Include="Recast\Recast.cpp" />
     <ClCompile Include="Recast\RecastAlloc.cpp" />

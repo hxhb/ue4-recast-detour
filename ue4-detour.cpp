@@ -4,7 +4,7 @@
 #include "Detour/DetourNavMesh.h"
 #include "Detour/DetourNavMeshQuery.h"
 #include "UE4RecastHelper.h"
-
+#include "ObstaclesTools/BuildObstacles.hpp"
 
 void printUsage();
 int DoCheckPosision(int argc, char** argv);
@@ -12,7 +12,12 @@ int DoCheckPosision(int argc, char** argv);
 
 int main(int argc,char** argv)
 {
-	return DoCheckPosision(argc, argv);
+	// return DoCheckPosision(argc, argv);
+
+
+	const char* filepath = "D:\\dungeon.obj";
+	FObstaclesTool ObstaclesTool;
+	ObstaclesTool.BuildObstacles(filepath);
 }
 
 
