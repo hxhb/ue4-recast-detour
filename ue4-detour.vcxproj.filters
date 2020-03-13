@@ -19,6 +19,12 @@
     <Filter Include="Source Files\DetourTileCache">
       <UniqueIdentifier>{2a4f8be3-46f0-47e8-a3bf-deefcfbe39e8}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Source Files\Recast">
+      <UniqueIdentifier>{b33efa01-f6c2-4750-b0a2-958939721124}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\ObstaclesTools">
+      <UniqueIdentifier>{ccf8af21-0631-4c13-98ea-14de3f1bd254}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Detour\DetourAlloc.h">
@@ -53,6 +59,21 @@
     </ClInclude>
     <ClInclude Include="DetourTileCache\DetourTileCacheBuilder.h">
       <Filter>Source Files\DetourTileCache</Filter>
+    </ClInclude>
+    <ClInclude Include="Recast\Recast.h">
+      <Filter>Source Files\Recast</Filter>
+    </ClInclude>
+    <ClInclude Include="Recast\RecastAlloc.h">
+      <Filter>Source Files\Recast</Filter>
+    </ClInclude>
+    <ClInclude Include="Recast\RecastAssert.h">
+      <Filter>Source Files\Recast</Filter>
+    </ClInclude>
+    <ClInclude Include="BuildObstacles.hpp">
+      <Filter>Source Files\ObstaclesTools</Filter>
+    </ClInclude>
+    <ClInclude Include="ObstaclesTools\MeshLoaderObj.h">
+      <Filter>Source Files\ObstaclesTools</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -91,6 +112,39 @@
     </ClCompile>
     <ClCompile Include="DetourTileCache\DetourTileCacheRegion.cpp">
       <Filter>Source Files\DetourTileCache</Filter>
+    </ClCompile>
+    <ClCompile Include="Recast\Recast.cpp">
+      <Filter>Source Files\Recast</Filter>
+    </ClCompile>
+    <ClCompile Include="Recast\RecastAlloc.cpp">
+      <Filter>Source Files\Recast</Filter>
+    </ClCompile>
+    <ClCompile Include="Recast\RecastArea.cpp">
+      <Filter>Source Files\Recast</Filter>
+    </ClCompile>
+    <ClCompile Include="Recast\RecastContour.cpp">
+      <Filter>Source Files\Recast</Filter>
+    </ClCompile>
+    <ClCompile Include="Recast\RecastFilter.cpp">
+      <Filter>Source Files\Recast</Filter>
+    </ClCompile>
+    <ClCompile Include="Recast\RecastLayers.cpp">
+      <Filter>Source Files\Recast</Filter>
+    </ClCompile>
+    <ClCompile Include="Recast\RecastMesh.cpp">
+      <Filter>Source Files\Recast</Filter>
+    </ClCompile>
+    <ClCompile Include="Recast\RecastMeshDetail.cpp">
+      <Filter>Source Files\Recast</Filter>
+    </ClCompile>
+    <ClCompile Include="Recast\RecastRasterization.cpp">
+      <Filter>Source Files\Recast</Filter>
+    </ClCompile>
+    <ClCompile Include="Recast\RecastRegion.cpp">
+      <Filter>Source Files\Recast</Filter>
+    </ClCompile>
+    <ClCompile Include="ObstaclesTools\MeshLoaderObj.cpp">
+      <Filter>Source Files\ObstaclesTools</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

@@ -151,6 +151,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="BuildObstacles.hpp" />
     <ClInclude Include="DetourTileCache\DetourTileCache.h" />
     <ClInclude Include="DetourTileCache\DetourTileCacheBuilder.h" />
     <ClInclude Include="Detour\DetourAlloc.h" />
@@ -161,6 +162,10 @@
     <ClInclude Include="Detour\DetourNavMeshQuery.h" />
     <ClInclude Include="Detour\DetourNode.h" />
     <ClInclude Include="Detour\DetourStatus.h" />
+    <ClInclude Include="ObstaclesTools\MeshLoaderObj.h" />
+    <ClInclude Include="Recast\Recast.h" />
+    <ClInclude Include="Recast\RecastAlloc.h" />
+    <ClInclude Include="Recast\RecastAssert.h" />
     <ClInclude Include="UE4RecastHelper.h" />
   </ItemGroup>
   <ItemGroup>
@@ -174,6 +179,17 @@
     <ClCompile Include="Detour\DetourNavMeshBuilder.cpp" />
     <ClCompile Include="Detour\DetourNavMeshQuery.cpp" />
     <ClCompile Include="Detour\DetourNode.cpp" />
+    <ClCompile Include="ObstaclesTools\MeshLoaderObj.cpp" />
+    <ClCompile Include="Recast\Recast.cpp" />
+    <ClCompile Include="Recast\RecastAlloc.cpp" />
+    <ClCompile Include="Recast\RecastArea.cpp" />
+    <ClCompile Include="Recast\RecastContour.cpp" />
+    <ClCompile Include="Recast\RecastFilter.cpp" />
+    <ClCompile Include="Recast\RecastLayers.cpp" />
+    <ClCompile Include="Recast\RecastMesh.cpp" />
+    <ClCompile Include="Recast\RecastMeshDetail.cpp" />
+    <ClCompile Include="Recast\RecastRasterization.cpp" />
+    <ClCompile Include="Recast\RecastRegion.cpp" />
     <ClCompile Include="ue4-detour.cpp" />
     <ClCompile Include="UE4RecastHelper.cpp" />
   </ItemGroup>
