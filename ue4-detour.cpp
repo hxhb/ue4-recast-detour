@@ -8,14 +8,42 @@
 
 void printUsage();
 int DoCheckPosision(int argc, char** argv);
-
+void FindNavPath(const char* InPath, const UE4RecastHelper::FVector3& InStart, const UE4RecastHelper::FVector3& InEnd);
 
 int main(int argc,char** argv)
 {
-	return DoCheckPosision(argc, argv);
+	using namespace UE4RecastHelper;
+	FVector3 Begin{ 3700.f,2770.f,25.f };
+	FVector3 End{ 6060.f,4900.f,25.f };
+	FindNavPath("D:\\nav\\NetTester-NavData-2020.04.27-17.08.08.bin",Begin,End);
+	system("pause");
+	return 0;
+	// return DoCheckPosision(argc, argv);
 }
 
+void FindNavPath(const char* InPath,const UE4RecastHelper::FVector3& InStart,const UE4RecastHelper::FVector3& InEnd)
+{
+	
 
+	dtNavMesh* NavMesh = UE4RecastHelper::DeSerializedtNavMesh(InPath);
+	dtNavMeshQuery Query;
+
+
+	std::vector<UE4RecastHelper::FVector3> paths;
+	if (UE4RecastHelper::findStraightPath(NavMesh, &Query, InStart, InEnd, paths))
+	{
+		printf("find StraightPath is successed.\n");
+
+		for (const auto& point : paths)
+		{
+			printf("x:%f,y:%f,z:%f\n", point.X, point.Y, point.Z);
+		}
+	}
+	else
+	{
+		printf("find StraightPath is faild.");
+	}
+}
 void printUsage()
 {
 	printf("Usage:\n");

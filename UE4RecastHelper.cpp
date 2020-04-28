@@ -80,7 +80,7 @@ int UE4RecastHelper::findStraightPath(dtNavMesh* InNavMeshData, dtNavMeshQuery* 
 	NavQuery.init(InNavMeshData, 0, &LinkFilter);
 	// UE_LOG(LogTemp, Warning, TEXT("CALL NavQuery.init(InNavMeshData, 0, &LinkFilter);"));
 #else
-	NavQuery.init(InNavMeshData, 0);
+	NavQuery.init(InNavMeshData, 1024);
 #endif
 
 
@@ -114,14 +114,40 @@ int UE4RecastHelper::findStraightPath(dtNavMesh* InNavMeshData, dtNavMeshQuery* 
 #endif
 
 	dtQueryResult Result;
-	dtStatus FindPathStatus = NavQuery.findPath(StartPolyRef, EndPolyRef, (float*)(&StartClosestPoint), (float*)(&EndClosestPoint), &QueryFilter, Result, NULL);
-#ifdef USE_DETOUR_BUILT_INTO_UE4
-	UE_LOG(LogTemp, Log, TEXT("FindDetourPath FindPath return status is %u."), FindPathStatus);
+	float totalcost[1024 * 3];
+	dtStatus FindPathStatus = NavQuery.findPath(StartPolyRef, EndPolyRef, (float*)(&StartClosestPoint), (float*)(&EndClosestPoint), &QueryFilter, Result, totalcost);
+	// UE_LOG(LogTemp, Log, TEXT("findPath status is %u.,result size is %u."), FindPathStatus, result.size());
+	if (!dtStatusSucceed(FindPathStatus) && Result.size() <= 0)
+	{
+		// UE_LOG(LogTemp, Log, TEXT("find path faild."))
+			return false;
+}
 
-	UE_LOG(LogTemp, Log, TEXT("FindDetourPath dtQueryResult size is %u."), Result.size());
-#endif
-//	InNavmeshQuery->findStraightPath(&StartNearestPt.X, &EndNearestPt.X, );
-	return 0;
+	std::vector<dtPolyRef> path;
+
+	for (int index = 0; index < Result.size(); ++index)
+	{
+		// UE_LOG(LogTemp, Log, TEXT("Find Path index is %d ref is %u."), index, result.getRef(index));
+		path.push_back(Result.getRef(index));
+		float currentpos[3]{ 0.f };
+		Result.getPos(index, currentpos);
+		// UE_LOG(LogTemp, Log, TEXT("Find Path index is %d pos is %s."), index, *Recast2UnrealPoint(FVector3(currentpos[0], currentpos[1], currentpos[2])).ToString());
+		// OutPaths.Add(UFlibExportNavData::Recast2UnrealPoint(FVector(currentpos[0], currentpos[1], currentpos[2])));
+	}
+
+	dtQueryResult findStraightPathResult;
+	NavQuery.findStraightPath((float*)(&StartClosestPoint), (float*)(&EndClosestPoint), path.data(), (int)path.size(), findStraightPathResult);
+
+	// UE_LOG(LogTemp, Log, TEXT("findStraightPath size is %u."), findStraightPathResult.size());
+	for (int index = 0; index < findStraightPathResult.size(); ++index)
+	{
+		float currentpos[3]{ 0.f };
+		findStraightPathResult.getPos(index, currentpos);
+		// UE_LOG(LogTemp, Log, TEXT("findStraightPath index is %d ref is %u."), index, findStraightPathResult.getRef(index));
+		// UE_LOG(LogTemp, Log, TEXT("findStraightPath index is %d pos is %s."), index, *Recast2UnrealPoint(FVector3(currentpos[0], currentpos[1], currentpos[2])).ToString());
+		paths.push_back(Recast2UnrealPoint(FVector3(currentpos[0], currentpos[1], currentpos[2])));
+	}
+	return true;
 }
 
 bool UE4RecastHelper::GetRandomPointInRadius(dtNavMeshQuery* InNavmeshQuery, dtQueryFilter* InQueryFilter, const FVector3& InOrigin, const FVector3& InRedius, FVector3& OutPoint)
