@@ -4,6 +4,7 @@
 #include "Detour/DetourNavMesh.h"
 #include "Detour/DetourNavMeshQuery.h"
 #include "UE4RecastHelper.h"
+#include "TileMesh_Example.h"
 
 
 void printUsage();
@@ -12,22 +13,18 @@ void FindNavPath(const char* InPath, const UE4RecastHelper::FVector3& InStart, c
 
 int main(int argc,char** argv)
 {
-	using namespace UE4RecastHelper;
-	FVector3 Begin{ 3700.f,2770.f,25.f };
-	FVector3 End{ 6060.f,4900.f,25.f };
-	FindNavPath("D:\\nav\\NetTester-NavData-2020.04.27-17.08.08.bin",Begin,End);
+	TileMeshExample TileMeshExampleIns;
+
 	system("pause");
-	return 0;
-	// return DoCheckPosision(argc, argv);
 }
+
 
 void FindNavPath(const char* InPath,const UE4RecastHelper::FVector3& InStart,const UE4RecastHelper::FVector3& InEnd)
 {
-	
-
+	printf("Start: x:%f,y:%f,z:%f\n", InStart.X, InStart.Y, InStart.Z);
+	printf("End: x:%f,y:%f,z:%f\n", InEnd.X, InEnd.Y, InEnd.Z);
 	dtNavMesh* NavMesh = UE4RecastHelper::DeSerializedtNavMesh(InPath);
 	dtNavMeshQuery Query;
-
 
 	std::vector<UE4RecastHelper::FVector3> paths;
 	if (UE4RecastHelper::findStraightPath(NavMesh, &Query, InStart, InEnd, paths))

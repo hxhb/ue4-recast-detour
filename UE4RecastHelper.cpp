@@ -269,6 +269,7 @@ dtNavMesh* UE4RecastHelper::DeSerializedtNavMesh(const char* path)
 		std::fclose(fp);
 		return 0;
 	}
+	size_t NavMeshTileHeaderSize = sizeof(NavMeshTileHeader);
 
 	// Read tiles.
 	for (int i = 0; i < header.numTiles; ++i)
@@ -294,7 +295,7 @@ dtNavMesh* UE4RecastHelper::DeSerializedtNavMesh(const char* path)
 			fclose(fp);
 			return 0;
 		}
-
+		dtMeshHeader* MeshHeader = (dtMeshHeader*)(data);
 		mesh->addTile(data, tileHeader.dataSize, DT_TILE_FREE_DATA, tileHeader.tileRef, 0);
 	}
 
