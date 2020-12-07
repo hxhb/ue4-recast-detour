@@ -32,6 +32,7 @@
 #	define dtAssert(x) do { (void)sizeof((x)); } while((void)(__LINE__==-1),false)  
 #else
 #	include <assert.h> 
+#	define CA_ASSUME( Expr )
 #	define dtAssert(x) { assert(x); CA_ASSUME(x); } (void)0
 #endif
 
