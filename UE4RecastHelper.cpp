@@ -46,7 +46,7 @@ bool UE4RecastHelper::dtIsValidNavigationPoint(dtNavMesh* InNavMeshData, const U
 	NavQuery.findNearestPoly(&RcPoint.X, &RcExtent.X, &QueryFilter, &PolyRef, (float*)(&ClosestPoint));
 #endif
 
-	UE_LOG(LogTemp, Log, TEXT("dtIsValidNavigationPoint PolyRef is %ud."), PolyRef);
+	// UE_LOG(LogTemp, Log, TEXT("dtIsValidNavigationPoint PolyRef is %ud."), PolyRef);
 	if (PolyRef > 0)
 	{
 		const FVector3& UnrealClosestPoint = UE4RecastHelper::Recast2UnrealPoint(ClosestPoint);
