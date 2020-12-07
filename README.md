@@ -21,3 +21,9 @@ Extern: X=10.000000     Y=10.000000     Z=10.000000
 The Location is valid navigation position.
 ```
 
+## Compile
+
+```bash
+g++ -std=c++11 -o test.exe *.cpp *.h Detour/*.cpp Detour/*.h -D NDEBUG
+```
+使用VS可以新建一个空的解决方案添加仓库中的代码。
