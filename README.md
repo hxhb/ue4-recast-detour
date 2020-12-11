@@ -24,6 +24,6 @@ The Location is valid navigation position.
 ## Compile
 
 ```bash
-g++ -std=c++11 -o test.exe *.cpp *.h Detour/*.cpp Detour/*.h -D NDEBUG
+g++ -std=c++11 -o test.exe *.cpp *.h Detour/*.cpp Detour/*.h
 ```
-使用VS可以新建一个空的解决方案添加仓库中的代码。
+使用VS编译，可以新建一个空的解决方案添加仓库中的代码，出现的`std::fopen`的报错可以添加`_CRT_SECURE_NO_WARNINGS`宏来解决。
