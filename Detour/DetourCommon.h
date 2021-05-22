@@ -1,4 +1,4 @@
-// Copyright 1998-2019 Epic Games, Inc. All Rights Reserved.
+// Copyright Epic Games, Inc. All Rights Reserved.
 // Modified version of Recast/Detour's source file
 
 //
@@ -485,6 +485,47 @@ inline void dtSwapEndian(float* v)
 
 void dtRandomPointInConvexPoly(const float* pts, const int npts, float* areas,
 							   const float s, const float t, float* out);
+
+// @UE4 BEGIN
+enum dtRotation
+{
+	DT_ROTATE_0, 
+	DT_ROTATE_90, 
+	DT_ROTATE_180, 
+	DT_ROTATE_270
+};
+
+/// Select a 90 degree increment value from an input angle in degree.
+///  @param[in]		rotationDeg The desired rotation in degree.
+///  @return The rotation enum value.
+dtRotation dtSelectRotation(float rotationDeg);
+
+/// Rotate by 90 degree increments.
+///  @param[out]	dest	The result position. [(x, y, z)]
+///  @param[in]		v		The vector to rotate. [(x, y, z)]
+///  @param[in]		rot		The rotation enum value.
+void dtVRot90(float* dest, const float* v, const dtRotation rot);
+
+/// Rotate by 90 degree increments.
+///  @param[out]	dest	The result position. [(x, y, z)]
+///  @param[in]		v		The vector to rotate. [(x, y, z)]
+///  @param[in]		rot		The rotation enum value.
+void dtVRot90(unsigned short* dest, const unsigned short* v, const dtRotation rot);
+
+/// Rotate vector around center position by increments of 90 degrees.
+///  @param[out]	dest	The result position. [(x, y, z)]
+///  @param[in]		v		The vector to rotate. [(x, y, z)]
+///  @param[in]		center	The center point. [(x, y, z)]
+///  @param[in]		rot		The rotation enum value.
+void dtRotate90(float* dest, const float* v, const float* center, const dtRotation rot);
+
+/// Rotate vector around center position by increments of 90 degrees.
+///  @param[out]	dest	The result position. [(x, y, z)]
+///  @param[in]		v		The vector to rotate. [(x, y, z)]
+///  @param[in]		center	The center point. [(x, y, z)]
+///  @param[in]		rot		The rotation enum value.
+void dtRotate90(unsigned short* dest, const unsigned short* v, const unsigned short* center, const dtRotation rot);
+// @UE4 END
 
 /// @}
 

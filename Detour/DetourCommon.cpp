@@ -1,4 +1,4 @@
-// Copyright 1998-2019 Epic Games, Inc. All Rights Reserved.
+// Copyright Epic Games, Inc. All Rights Reserved.
 // Modified version of Recast/Detour's source file
 
 //
@@ -405,6 +405,101 @@ void dtRandomPointInConvexPoly(const float* pts, const int npts, float* areas,
 	out[1] = a*pa[1] + b*pb[1] + c*pc[1];
 	out[2] = a*pa[2] + b*pb[2] + c*pc[2];
 }
+
+// @UE4 BEGIN
+dtRotation dtSelectRotation(float rotationDeg)
+{
+	rotationDeg = fmodf(rotationDeg, 360.f);
+	if (rotationDeg < 0)
+		rotationDeg += 360.f;
+
+	// Snap to 90 degrees increment
+	dtRotation rot = DT_ROTATE_0;
+	if (rotationDeg > 45.f && rotationDeg <= 135.f)
+		rot = DT_ROTATE_90;
+	else if (rotationDeg > 135.f && rotationDeg <= 225.f)
+		rot = DT_ROTATE_180;
+	else if (rotationDeg > 225.f && rotationDeg <= 315.f)
+		rot = DT_ROTATE_270;
+
+	return rot;
+}
+
+void dtVRot90(float* dest, const float* v, const dtRotation rot)
+{
+	dest[1] = v[1];
+
+	switch (rot)
+	{
+	case DT_ROTATE_90:
+		dest[0] = -v[2];
+		dest[2] = v[0];
+		break;
+	case DT_ROTATE_180:
+		dest[0] = -v[0];
+		dest[2] = -v[2];
+		break;
+	case DT_ROTATE_270:
+		dest[0] = v[2];
+		dest[2] = -v[0];
+		break;
+	default:
+		// DT_ROTATE_0
+		dest[0] = v[0];
+		dest[2] = v[2];
+		break;
+	}
+}
+
+void dtVRot90(unsigned short* dest, const unsigned short* v, const dtRotation rot)
+{
+	dest[1] = v[1];
+
+	switch (rot)
+	{
+	case DT_ROTATE_90:
+		dest[0] = -v[2];
+		dest[2] = v[0];
+		break;
+	case DT_ROTATE_180:
+		dest[0] = -v[0];
+		dest[2] = -v[2];
+		break;
+	case DT_ROTATE_270:
+		dest[0] = v[2];
+		dest[2] = -v[0];
+		break;
+	default:
+		// DT_ROTATE_0
+		dest[0] = v[0];
+		dest[2] = v[2];
+		break;
+	}
+}
+
+void dtRotate90(float* dest, const float* v, const float* center, const dtRotation rot)
+{
+	float localPos[3];
+	dtVsub(localPos, v, center);
+	float newLocalPos[3];
+	dtVRot90(newLocalPos, localPos, rot);
+	dtVadd(dest, center, newLocalPos);
+}
+
+void dtRotate90(unsigned short* dest, const unsigned short* v, const unsigned short* center, const dtRotation rot)
+{
+	unsigned short localPos[3];
+	localPos[0] = v[0] - center[0];
+	localPos[2] = v[2] - center[2];
+
+	unsigned short newLocalPos[3];
+	dtVRot90(newLocalPos, localPos, rot);
+
+	dest[0] = center[0] + newLocalPos[0];
+	dest[1] = v[1];
+	dest[2] = center[2] + newLocalPos[2];
+}
+// @UE4 END
 
 inline float vperpXZ(const float* a, const float* b) { return a[0]*b[2] - a[2]*b[0]; }
 

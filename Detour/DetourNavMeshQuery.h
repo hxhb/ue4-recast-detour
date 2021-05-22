@@ -1,4 +1,4 @@
-// Copyright 1998-2019 Epic Games, Inc. All Rights Reserved.
+// Copyright Epic Games, Inc. All Rights Reserved.
 // Modified version of Recast/Detour's source file
 
 //
@@ -350,16 +350,9 @@ public:
 	///  @param[out]	result		Results for path corridor, fills in refs and costs for each poly from start to end
 	///	 @param[out]	totalCost			If provided will get filled will total cost of path
 	dtStatus findPath(dtPolyRef startRef, dtPolyRef endRef,
-					  const float* startPos, const float* endPos,
+					  const float* startPos, const float* endPos, const float costLimit, //@UE4
 					  const dtQueryFilter* filter,
-					  dtQueryResult& result, float* totalCost) const;
-	
-	/// Check if there is a path from start polygon to the end polygon using cluster graph
-	/// (cheap, does not care about link costs)
-	///  @param[in]		startRef			The reference id of the start polygon.
-	///  @param[in]		endRef				The reference id of the end polygon.
-	dtStatus testClusterPath(dtPolyRef startRef, dtPolyRef endRef) const; 
-
+					  dtQueryResult& result, float* totalCost) const;	
 	/// Finds the straight path from the start to the end position within the polygon corridor.
 	///  @param[in]		startPos			Path start position. [(x, y, z)]
 	///  @param[in]		endPos				Path end position. [(x, y, z)]
@@ -385,10 +378,11 @@ public:
 	///  @param[in]		endRef		The reference id of the end polygon.
 	///  @param[in]		startPos	A position within the start polygon. [(x, y, z)]
 	///  @param[in]		endPos		A position within the end polygon. [(x, y, z)]
+	///  @param[in]		costLimit	Cost limit of nodes allowed to be added to the open list	//@UE4
 	///  @param[in]		filter		The polygon filter to apply to the query.
 	/// @returns The status flags for the query.
 	dtStatus initSlicedFindPath(dtPolyRef startRef, dtPolyRef endRef,
-								const float* startPos, const float* endPos,
+								const float* startPos, const float* endPos, const float costLimit, //@UE4
 								const dtQueryFilter* filter);
 
 	/// Updates an in-progress sliced path query.
@@ -629,6 +623,11 @@ public:
 										 const dtQueryFilter* filter, float (*frand)(),
 										 dtPolyRef* randomRef, float* randomPt) const;
 
+	/// Check if there is a path from start polygon to the end polygon using cluster graph
+	/// (cheap, does not care about link costs)
+	///  @param[in]		startRef			The reference id of the start polygon.
+	///  @param[in]		endRef				The reference id of the end polygon.
+	dtStatus testClusterPath(dtPolyRef startRef, dtPolyRef endRef) const; 
 	/// Returns random location on navmesh within specified cluster.
 	///  @param[in]		frand			Function returning a random number [0..1).
 	///  @param[out]	randomRef		The reference id of the random location.
@@ -636,6 +635,14 @@ public:
 	/// @returns The status flags for the query.
 	dtStatus findRandomPointInCluster(dtClusterRef clusterRef, float (*frand)(),
 									  dtPolyRef* randomRef, float* randomPt) const;
+
+	/// Gets the cluster containing given polygon
+	///  @param[in]		polyRef		The reference id of the polygon.
+	///  @param[out]	clusterRef	The reference id of the cluster
+	/// @returns The status flags for the query.
+	dtStatus getPolyCluster(dtPolyRef polyRef, dtClusterRef& clusterRef) const;
+
+//@UE4 END
 	
 	/// Finds the closest point on the specified polygon.
 	///  @param[in]		ref			The reference id of the polygon.
@@ -672,12 +679,6 @@ public:
 	///  @param[out]	height		The height at the surface of the polygon.
 	/// @returns The status flags for the query.
 	dtStatus getPolyHeight(dtPolyRef ref, const float* pos, float* height) const;
-
-	/// Gets the cluster containing given polygon
-	///  @param[in]		polyRef		The reference id of the polygon.
-	///  @param[out]	clusterRef	The reference id of the cluster
-	/// @returns The status flags for the query.
-	dtStatus getPolyCluster(dtPolyRef polyRef, dtClusterRef& clusterRef) const;
 
 	/// @}
 	/// @name Miscellaneous Functions
@@ -781,6 +782,7 @@ private:
 		float lastBestNodeCost;
 		dtPolyRef startRef, endRef;
 		float startPos[3], endPos[3];
+		float costLimit; 					//@UE4 ///< Cost limit of nodes allowed to be added to the open list
 		const dtQueryFilter* filter;
 	};
 	dtQueryData m_query;				///< Sliced query state.

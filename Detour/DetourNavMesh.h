@@ -1,4 +1,4 @@
-// Copyright 1998-2019 Epic Games, Inc. All Rights Reserved.
+// Copyright Epic Games, Inc. All Rights Reserved.
 // Modified version of Recast/Detour's source file
 
 //
@@ -350,10 +350,11 @@ struct dtMeshHeader
 	int detailTriCount;			///< The number of triangles in the detail mesh.
 	int bvNodeCount;			///< The number of bounding volume nodes. (Zero if bounding volumes are disabled.)
 	int offMeshConCount;		///< The number of point type off-mesh connections.
-	int offMeshSegConCount;		///< The number of segment type off-mesh connections.
 	int offMeshBase;			///< The index of the first polygon which is an point type off-mesh connection.
+	int offMeshSegConCount;		///< The number of segment type off-mesh connections.
 	int offMeshSegPolyBase;		///< The index of the first polygon which is an segment type off-mesh connection
 	int offMeshSegVertBase;		///< The index of the first vertex used by segment type off-mesh connection
+	int clusterCount;			///< Number of clusters
 	float walkableHeight;		///< The height of the agents using the tile.
 	float walkableRadius;		///< The radius of the agents using the tile.
 	float walkableClimb;		///< The maximum climb height of the agents using the tile.
@@ -362,8 +363,6 @@ struct dtMeshHeader
 	
 	/// The bounding volume quantization factor. 
 	float bvQuantFactor;
-
-	int clusterCount;			///< Number of clusters
 };
 
 /// Defines a navigation mesh tile.
@@ -390,20 +389,21 @@ struct dtMeshTile
 	dtBVNode* bvTree;
 
 	dtOffMeshConnection* offMeshCons;		///< The tile off-mesh connections. [Size: dtMeshHeader::offMeshConCount]
-	dtOffMeshSegmentConnection* offMeshSeg;	///< The tile off-mesh connections. [Size: dtMeshHeader::offMeshSegConCount]
-		
+
 	unsigned char* data;					///< The tile data. (Not directly accessed under normal situations.)
 	int dataSize;							///< Size of the tile data.
 	int flags;								///< Tile flags. (See: #dtTileFlags)
 	dtMeshTile* next;						///< The next free tile, or the next tile in the spatial grid.
 
+	dtOffMeshSegmentConnection* offMeshSeg;		///< The tile off-mesh connections. [Size: dtMeshHeader::offMeshSegConCount]
 	dtCluster* clusters;					///< Cluster data
 	unsigned short* polyClusters;			///< Cluster Id for each ground type polygon [Size: dtMeshHeader::polyCount]
 
-	dtChunkArray<dtLink> dynamicLinksO;			///< Dynamic links array (indices starting from dtMeshHeader::maxLinkCount)
-	unsigned int dynamicFreeListO;				///< Index of the next free dynamic link
 	dtChunkArray<dtClusterLink> dynamicLinksC;	///< Dynamic links array (indices starting from DT_CLINK_FIRST)
 	unsigned int dynamicFreeListC;				///< Index of the next free dynamic link
+	dtChunkArray<dtLink> dynamicLinksO;			///< Dynamic links array (indices starting from dtMeshHeader::maxLinkCount)
+	unsigned int dynamicFreeListO;				///< Index of the next free dynamic link
+	//@UE4 END
 };
 
 /// Configuration parameters used to define multi-tile navigation meshes.
@@ -566,16 +566,15 @@ public:
 	/// @return The specified off-mesh connection, or null if the polygon reference is not valid.
 	const dtOffMeshConnection* getOffMeshConnectionByRef(dtPolyRef ref) const;
 
-	/// Gets the specified off-mesh connection: segment type
-	///  @param[in]	ref		The polygon reference of the off-mesh connection.
-	/// @return The specified off-mesh connection, or null if the polygon reference is not valid.
-	const dtOffMeshSegmentConnection* getOffMeshSegmentConnectionByRef(dtPolyRef ref) const;
-
 	/// Updates area and flags for specified off-mesh connection: point type
 	///  @param[in] userId	User Id of connection
 	///	 @param[in] newArea	Area code to apply
 	void updateOffMeshConnectionByUserId(unsigned int userId, unsigned char newArea, unsigned short newFlags);
 
+	/// Gets the specified off-mesh connection: segment type
+	///  @param[in]	ref		The polygon reference of the off-mesh connection.
+	/// @return The specified off-mesh connection, or null if the polygon reference is not valid.
+	const dtOffMeshSegmentConnection* getOffMeshSegmentConnectionByRef(dtPolyRef ref) const;
 	/// Updates area and flags for specified off-mesh connection: segment type
 	///  @param[in] userId	User Id of connection
 	///	 @param[in] newArea	Area code to apply

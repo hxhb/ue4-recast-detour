@@ -1,4 +1,4 @@
-// Copyright 1998-2019 Epic Games, Inc. All Rights Reserved.
+// Copyright Epic Games, Inc. All Rights Reserved.
 // Modified version of Recast/Detour's source file
 
 //
@@ -21,8 +21,6 @@
 
 #ifndef DETOURSTATUS_H
 #define DETOURSTATUS_H
-
-
 
 typedef unsigned int dtStatus;
 
