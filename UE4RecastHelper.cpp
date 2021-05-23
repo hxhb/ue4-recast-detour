@@ -7,6 +7,8 @@
 #include <cstdio>
 #include <cstdlib>
 
+#pragma warning(disable:4996)
+
 static const long RCN_NAVMESH_VERSION = 1;
 static const int INVALID_NAVMESH_POLYREF = 0;
 static const int MAX_POLYS = 256;
@@ -62,6 +64,9 @@ bool UE4RecastHelper::dtIsValidNavigationPoint(dtNavMesh* InNavMeshData, const U
 	return bSuccess;
 }
 
+static const int MAX_PATHQUEUE_NODES = 4096;
+static const int MAX_COMMON_NODES = 512;
+
 int UE4RecastHelper::findStraightPath(dtNavMesh* InNavMeshData, dtNavMeshQuery* InNavmeshQuery, const FVector3& start, const FVector3& end, std::vector<FVector3>& paths)
 {
 	bool bSuccess = false;
@@ -80,7 +85,7 @@ int UE4RecastHelper::findStraightPath(dtNavMesh* InNavMeshData, dtNavMeshQuery* 
 	NavQuery.init(InNavMeshData, 0, &LinkFilter);
 	// UE_LOG(LogTemp, Warning, TEXT("CALL NavQuery.init(InNavMeshData, 0, &LinkFilter);"));
 #else
-	NavQuery.init(InNavMeshData, 0);
+	NavQuery.init(InNavMeshData, 1024);
 #endif
 
 
@@ -92,18 +97,24 @@ int UE4RecastHelper::findStraightPath(dtNavMesh* InNavMeshData, dtNavMeshQuery* 
 	dtQueryFilter QueryFilter;
 
 #ifdef USE_DETOUR_BUILT_INTO_UE4
-	NavQuery.findNearestPoly2D(&RcStart.X, &RcExtent.X, &QueryFilter, &StartPolyRef, (float*)(&StartClosestPoint));
+	dtStatus StartStatus = NavQuery.findNearestPoly2D(&RcStart.X, &RcExtent.X, &QueryFilter, &StartPolyRef, (float*)(&StartClosestPoint));
 	// UE_LOG(LogTemp, Warning, TEXT("CALL findNearestPoly2D"));
 #else
-	NavQuery.findNearestPoly(&RcStart.X, &RcExtent.X, &QueryFilter, &StartPolyRef, (float*)(&StartClosestPoint));
+	dtStatus StartStatus = NavQuery.findNearestPoly(&RcStart.X, &RcExtent.X, &QueryFilter, &StartPolyRef, &StartClosestPoint.X);
 #endif
 
 #ifdef USE_DETOUR_BUILT_INTO_UE4
-	NavQuery.findNearestPoly2D(&RcEnd.X, &RcExtent.X, &QueryFilter, &EndPolyRef, (float*)(&EndClosestPoint));
+	dtStatus EndStatus = NavQuery.findNearestPoly2D(&RcEnd.X, &RcExtent.X, &QueryFilter, &EndPolyRef, (float*)(&EndClosestPoint));
 	// UE_LOG(LogTemp, Warning, TEXT("CALL findNearestPoly2D"));
 #else
-	NavQuery.findNearestPoly(&RcEnd.X, &RcExtent.X, &QueryFilter, &EndPolyRef, (float*)(&EndClosestPoint));
+	dtStatus EndStatus = NavQuery.findNearestPoly(&RcEnd.X, &RcExtent.X, &QueryFilter, &EndPolyRef, &EndClosestPoint.X);
 #endif
+
+	if (!dtStatusSucceed(StartStatus) || !dtStatusSucceed(EndStatus))
+	{
+		//UE_LOG(LogTemp, Log, TEXT("find Start or End nearest poly faild."))
+		return false;
+	}
 
 #ifdef USE_DETOUR_BUILT_INTO_UE4
 	UE_LOG(LogTemp, Log, TEXT("FindDetourPath StartPolyRef is %u."), StartPolyRef);
@@ -114,12 +125,40 @@ int UE4RecastHelper::findStraightPath(dtNavMesh* InNavMeshData, dtNavMeshQuery* 
 #endif
 
 	dtQueryResult Result;
-	dtStatus FindPathStatus = NavQuery.findPath(StartPolyRef, EndPolyRef, (float*)(&StartClosestPoint), (float*)(&EndClosestPoint),FLT_MAX, &QueryFilter, Result, NULL);
+	float totalcost[1024 * 3] = {0.f};
+
+	dtStatus FindPathStatus = NavQuery.findPath(StartPolyRef, EndPolyRef, &StartClosestPoint.X, &EndClosestPoint.X,FLT_MAX, &QueryFilter, Result, totalcost);
 #ifdef USE_DETOUR_BUILT_INTO_UE4
 	UE_LOG(LogTemp, Log, TEXT("FindDetourPath FindPath return status is %u."), FindPathStatus);
 
 	UE_LOG(LogTemp, Log, TEXT("FindDetourPath dtQueryResult size is %u."), Result.size());
 #endif
+	if (dtStatusSucceed(FindPathStatus))
+	{
+		std::vector<dtPolyRef> local_paths;
+
+		for (int index = 0; index < Result.size(); ++index)
+		{
+			// UE_LOG(LogTemp, Log, TEXT("Find Path index is %d ref is %u."), index, result.getRef(index));
+			local_paths.push_back(Result.getRef(index));
+			float currentpos[3]{ 0.f };
+			Result.getPos(index, currentpos);
+			// UE_LOG(LogTemp, Log, TEXT("Find Path index is %d pos is %s."), index, *UFlibExportNavData::Recast2UnrealPoint(FVector(currentpos[0], currentpos[1], currentpos[2])).ToString());
+			// OutPaths.Add(UFlibExportNavData::Recast2UnrealPoint(FVector(currentpos[0], currentpos[1], currentpos[2])));
+		}
+		dtQueryResult findStraightPathResult;
+		NavQuery.findStraightPath(&StartClosestPoint.X, &EndClosestPoint.X, local_paths.data(), local_paths.size(), findStraightPathResult);
+
+		for (int index = 0; index < findStraightPathResult.size(); ++index)
+		{
+			float currentpos[3]{ 0.f };
+			findStraightPathResult.getPos(index, currentpos);
+			// UE_LOG(LogTemp, Log, TEXT("findStraightPath index is %d ref is %u."), index, findStraightPathResult.getRef(index));
+			// UE_LOG(LogTemp, Log, TEXT("findStraightPath index is %d pos is %s."), index, *UFlibExportNavData::Recast2UnrealPoint(FVector(currentpos[0], currentpos[1], currentpos[2])).ToString());
+			paths.push_back(UE4RecastHelper::Recast2UnrealPoint(FVector3(currentpos[0], currentpos[1], currentpos[2])));
+		}
+	}
+
 //	InNavmeshQuery->findStraightPath(&StartNearestPt.X, &EndNearestPt.X, );
 	return 0;
 }

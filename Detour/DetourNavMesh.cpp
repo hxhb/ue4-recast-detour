@@ -1708,6 +1708,9 @@ dtStatus dtNavMesh::addTile(unsigned char* data, int dataSize, int flags,
 	tile->detailTris = (unsigned char*)d; d += detailTrisSize;
 	tile->bvTree = (dtBVNode*)d; d += bvtreeSize;
 	tile->offMeshCons = (dtOffMeshConnection*)d; d += offMeshLinksSize;
+	// If there are no items in the bvtree, reset the tree pointer.
+	if (!bvtreeSize)
+		tile->bvTree = 0;
 	tile->offMeshSeg = (dtOffMeshSegmentConnection*)d; d += offMeshSegsSize;
 	tile->clusters = (dtCluster*)d; d += clustersSize;
 	tile->polyClusters = (unsigned short*)d; d += clusterPolysSize;
@@ -1755,6 +1758,8 @@ dtStatus dtNavMesh::addTile(unsigned char* data, int dataSize, int flags,
 	dtMeshTile** neis = NULL;
 
 	// Connect with layers in current tile.
+	nneis = getTileCountAt(header->x, header->y);
+	neis = TileArray.PrepareArray(nneis);
 	getTilesAt(header->x, header->y, neis, nneis);
 	for (int j = 0; j < nneis; ++j)
 	{
@@ -1799,6 +1804,7 @@ dtStatus dtNavMesh::addTile(unsigned char* data, int dataSize, int flags,
 	
 	return DT_SUCCESS;
 }
+//@UE4 END
 
 const dtMeshTile* dtNavMesh::getTileAt(const int x, const int y, const int layer) const
 {
