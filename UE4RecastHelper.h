@@ -8,6 +8,7 @@
 #include "Detour/DetourNavMeshQuery.h"
 #include <math.h>
 #include <inttypes.h>
+#include <string>
 #include <vector>
 
 namespace UE4RecastHelper
@@ -71,7 +72,10 @@ namespace UE4RecastHelper
 
 	void SerializedtNavMesh(const char* path, const dtNavMesh* mesh);
 	dtNavMesh* DeSerializedtNavMesh(const char* path);
+	dtNavMesh* DeSerializeMultidtNavMesh(std::vector<std::string> bins);
+	char* DuplicateRecastRawData(char* Src, int32_t SrcSize);
 
+	dtNavMesh* DeSerializeMultidtNavMesh(std::vector<std::string> bins);
 	bool dtIsValidNavigationPoint(dtNavMesh* InNavMeshData, const FVector3& InPoint, const FVector3& InExtent = FVector3{ 10.f,10.f,10.f });
 
 	int findStraightPath(dtNavMesh* InNavMeshData, dtNavMeshQuery* InNavmeshQuery, const FVector3& start, const FVector3& end, std::vector<FVector3>& paths);

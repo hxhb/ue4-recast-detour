@@ -6,6 +6,7 @@
 #include <cstring>
 #include <cstdio>
 #include <cstdlib>
+#include "HACK_PRIVATE_MEMBER_UTILS.hpp"
 
 #pragma warning(disable:4996)
 
@@ -316,8 +317,67 @@ dtNavMesh* UE4RecastHelper::DeSerializedtNavMesh(const char* path)
 	return mesh;
 }
 
+DECL_HACK_PRIVATE_CONST_FUNCTION(dtNavMesh,getTile,const dtMeshTile*,int);
+DECL_HACK_PRIVATE_DATA(dtNavMesh, int, m_maxTiles);
+DECL_HACK_PRIVATE_DATA(dtNavMesh, dtNavMeshParams, m_params);
+
+dtNavMesh* UE4RecastHelper::DeSerializeMultidtNavMesh(std::vector<std::string> bins)
+{
+	dtNavMesh* NavMesh = nullptr;
+
+	auto dtNavMesh_GetTile=GET_PRIVATE_MEMBER_FUNCTION(dtNavMesh, getTile);
+	
+	for(const auto& bin:bins)
+	{
+		dtNavMesh* CurrNavMesh = UE4RecastHelper::DeSerializedtNavMesh(bin.c_str());
+		if(!NavMesh && CurrNavMesh)
+		{
+			NavMesh = CurrNavMesh;
+			continue;
+		}
+		GET_REF_PRIVATE_DATA_MEMBER(NavMesh_m_maxTiles, NavMesh, dtNavMesh, m_maxTiles);
+		GET_REF_PRIVATE_DATA_MEMBER(NavMesh_m_params, NavMesh, dtNavMesh, m_params);
+		
+		// NavMesh_m_params.maxPolys += CurrNavMesh->getParams()->maxPolys;
+
+		for(int tileIndex = 0;tileIndex <= CurrNavMesh->getMaxTiles();++tileIndex)
+		{
+			const dtMeshTile* CurrentTile = CALL_MEMBER_FUNCTION(CurrNavMesh,dtNavMesh_GetTile,tileIndex); //MainRecastNavMesh->getTile(tileIndex);
+			dtTileRef TileRef = CurrNavMesh->getTileRef(CurrentTile);
+			size_t TileDataSize = CurrentTile->dataSize;
+			char* TileData = UE4RecastHelper::DuplicateRecastRawData((char*)CurrentTile->data,TileDataSize);
+			dtTileRef AddtedTile;
+			unsigned int founedIndex = NavMesh->getTileIndex(CurrentTile);
+
+			dtStatus AddStatus = NavMesh->addTile((unsigned char*)TileData, TileDataSize, CurrentTile->flags, TileRef, &AddtedTile);
+			if (!dtStatusSucceed(AddStatus))
+			{
+				
+				printf("Add %s tile index(%d) faild!", bin.c_str(), tileIndex);
+				// return NULL;
+			}
+			else
+			{
+				NavMesh_m_maxTiles++;
+				NavMesh_m_params.maxTiles++;
+			}
+		
+		}
+	}
+	return NavMesh;
+}
 
 
+char* UE4RecastHelper::DuplicateRecastRawData(char* Src, int32_t SrcSize)
+{
+#if WITH_RECAST	
+	char* DupData = (char*)dtAlloc(SrcSize, DT_ALLOC_PERM);
+#else
+	char* DupData = (char*)malloc(SrcSize);
+#endif
+	std::memcpy(DupData, Src, SrcSize);
+	return DupData;
+}
 
 namespace UE4RecastHelper
 {

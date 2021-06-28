@@ -1,0 +1,1 @@
+g++ -std=c++11 -o ue4-FindPathOnMultiNavMesh.exe ue4-FindPathOnMultiNavMesh.cpp UE4RecastHelper.h UE4RecastHelper.cpp *.hpp Detour/*.cpp Detour/*.h -static
