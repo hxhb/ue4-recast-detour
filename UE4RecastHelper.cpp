@@ -147,7 +147,7 @@ int UE4RecastHelper::findStraightPath(dtNavMesh* InNavMeshData, dtNavMeshQuery* 
 			// OutPaths.Add(UFlibExportNavData::Recast2UnrealPoint(FVector(currentpos[0], currentpos[1], currentpos[2])));
 		}
 		dtQueryResult findStraightPathResult;
-		NavQuery.findStraightPath(&StartClosestPoint.X, &EndClosestPoint.X, local_paths.data(), local_paths.size(), findStraightPathResult);
+		NavQuery.findStraightPath(&StartClosestPoint.X, &EndClosestPoint.X, local_paths.data(), static_cast<int>(local_paths.size()), findStraightPathResult);
 
 		for (int index = 0; index < findStraightPathResult.size(); ++index)
 		{
