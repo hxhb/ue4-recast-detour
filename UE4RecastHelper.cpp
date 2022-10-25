@@ -67,7 +67,7 @@ bool UE4RecastHelper::dtIsValidNavigationPoint(dtNavMesh* InNavMeshData, const U
 static const int MAX_PATHQUEUE_NODES = 4096;
 static const int MAX_COMMON_NODES = 512;
 
-int UE4RecastHelper::findStraightPath(dtNavMesh* InNavMeshData, dtNavMeshQuery* InNavmeshQuery, const FVector3& start, const FVector3& end, std::vector<FVector3>& paths)
+bool UE4RecastHelper::findStraightPath(dtNavMesh* InNavMeshData, dtNavMeshQuery* InNavmeshQuery, const FVector3& start, const FVector3& end, std::vector<FVector3>& paths)
 {
 	bool bSuccess = false;
 
@@ -160,7 +160,7 @@ int UE4RecastHelper::findStraightPath(dtNavMesh* InNavMeshData, dtNavMeshQuery* 
 	}
 
 //	InNavmeshQuery->findStraightPath(&StartNearestPt.X, &EndNearestPt.X, );
-	return 0;
+	return bSuccess;
 }
 
 bool UE4RecastHelper::GetRandomPointInRadius(dtNavMeshQuery* InNavmeshQuery, dtQueryFilter* InQueryFilter, const FVector3& InOrigin, const FVector3& InRedius, FVector3& OutPoint)
