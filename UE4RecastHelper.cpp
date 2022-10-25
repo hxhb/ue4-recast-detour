@@ -135,6 +135,8 @@ bool UE4RecastHelper::findStraightPath(dtNavMesh* InNavMeshData, dtNavMeshQuery*
 #endif
 	if (dtStatusSucceed(FindPathStatus))
 	{
+		bSuccess = true;
+
 		std::vector<dtPolyRef> local_paths;
 
 		for (int index = 0; index < Result.size(); ++index)
